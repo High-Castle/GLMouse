@@ -292,12 +292,12 @@ bool switch_cursor_state ( bool& state )
 {
 	if ( hook.hook ) {
 		bool result = unset_low_level_mouse_hook( hook ) ;
-		corrupt_cursor( cursor_ctx ) ;
+		release_cursor( cursor_ctx ) ;
 		state = ! result ;
 		return result ;
 	}
 	state = set_low_level_mouse_hook( hook , mouse_hook ) ;
-	release_cursor( cursor_ctx ) ;
+	corrupt_cursor( cursor_ctx ) ;
 	return state ;
 }
 
