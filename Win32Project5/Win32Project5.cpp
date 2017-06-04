@@ -13,6 +13,7 @@
 
 #include <cassert>
 #include <cmath>
+#include <memory>
 
 #include <iostream>
 #include <utility>
@@ -24,100 +25,11 @@
 
 namespace
 {
-	enum
-	{
-		DIRECTION_TABLE_SZ = 8 ,
-		DEFAULT_CURSOR_IDX = 4
-	};
-
-	struct CursorContext 
-	{
-		HCURSOR table [ DIRECTION_TABLE_SZ ] ;
-		POINT last_pos ;
-		HCURSOR original_cursor ;
-	} ;
-
-	bool init_cursor_context ( CursorContext& con , HINSTANCE inst ) noexcept
-	{
-		con.original_cursor = CopyCursor( LoadCursor( nullptr , IDC_ARROW ) ) ;
-		std::size_t idx = 0 ;
-		for ( auto each : { IDC_CURSOR1 , IDC_CURSOR2 , IDC_CURSOR3 ,
-							IDC_CURSOR4 , IDC_CURSOR5 , IDC_CURSOR6 ,
-							IDC_CURSOR7 , IDC_CURSOR8 } )
-		{
-			con.table[ idx ] = LoadCursor( inst , MAKEINTRESOURCE( each ) ) ;
-			if ( ! con.table[ idx ] ) return false ;
-			++ idx ;
-		}
-		return true ;
-	} ;
-
-	void destroy_cursor_context( CursorContext& con )
-	{
-		DestroyCursor( con.original_cursor ) ;
-	}
-
-	bool set_cursor( HCURSOR cur ) noexcept {
-		enum { CURSOR_NORMAL = 32512 } ;
-		HCURSOR cursor = CopyCursor( cur ) ; // SetSystemCursor applies internally DestroyCursor.
-		BOOL res = SetSystemCursor( cursor , CURSOR_NORMAL ) ; // but DestroyCursor connot be used with shared resourses.
-		DestroyCursor( cursor ) ;								// ( for example, obtained via LoadCursor ) 
-		return res ;
-	}
-
-	HCURSOR initial_cursor ( CursorContext& con ) noexcept {
-		return con.table[ DEFAULT_CURSOR_IDX ] ;
-	}
-
-	bool corrupt_cursor ( CursorContext& con ) noexcept
-	{
-		GetCursorPos( &con.last_pos ) ;
-		return set_cursor( initial_cursor( con ) ) ;
-	}
-
-	bool release_cursor ( CursorContext& con ) noexcept
-	{
-		return set_cursor( con.original_cursor ) ;
-	}
 
 
-	std::size_t calculate_cursor_num( POINT prev_pos , POINT next_pos ) noexcept
-	{
-		const FLOAT cos_pi_d_6 = 0.96592582628f,
-					cos_pi_d_3 = 0.5f ;
-		LONG dx = next_pos.x - prev_pos.x ,
-			 dy = next_pos.y - prev_pos.y ;
 
-		float relation = std::abs( next_pos.x - prev_pos.x )
-						/ std::sqrt( dx * dx + dy * dy ) ;
 
-		if( dy < 0 )  {
-			if( dx > 0 ) {
-				if( relation > cos_pi_d_6 ) return 0 ; // I quad  
-				if( relation > cos_pi_d_3 ) return 1 ;
-				return 2 ;
-			}
-			if( relation < cos_pi_d_3 ) return 2 ; // II quad
-			if( relation < cos_pi_d_6 ) return 3 ;
-			return 4 ;
-		}
-		if( dx < 0 ) {
-			if( relation > cos_pi_d_6 ) return 4 ;  // III quad
-			if( relation > cos_pi_d_3 ) return 5 ;
-			return 6 ;
-		}
-		if( relation < cos_pi_d_3 ) return 6 ; // IV quad
-		if( relation < cos_pi_d_6 ) return 7 ;
-		return 0 ;
-	}
-
-	bool update_cursor( CursorContext& con , POINT next_pos ) noexcept
-	{
-		auto cursor_no = calculate_cursor_num( con.last_pos , next_pos ) ;
-		con.last_pos = next_pos ;
-		return set_cursor( con.table[ cursor_no ] ) ;
-	}
-
+	
 	struct TrayMenu final
 	{
 		enum
@@ -149,10 +61,10 @@ namespace
 					TrayMenu::ENABLE_CURSOR_ID , L"Disable") ;
 
 
-		//AppendMenu( menu.settings , MF_STRING | ( is_on_autostart ? MF_CHECKED : MF_UNCHECKED ),
-			//TrayMenu::AUTOSTART_ID , L"Enable Autostart" ) ;
-		
-		//AppendMenu( menu.root , MF_STRING | MF_POPUP, (UINT_PTR) &menu.settings , L"Settings") ;
+		AppendMenu( menu.root , MF_POPUP , ( UINT_PTR ) &menu.settings , L"Settings") ;
+		AppendMenu( menu.settings , MF_POPUP | ( is_on_autostart ? MF_CHECKED : MF_UNCHECKED ),
+			TrayMenu::AUTOSTART_ID , L"Enable Autostart" ) ;
+
 		AppendMenu( menu.root , MF_STRING , TrayMenu::EXIT_ID , L"Exit" ) ;
 		
 		return true ;
@@ -302,15 +214,18 @@ bool switch_cursor_state ( bool& state )
 }
 
 
+
 void try_to ( bool ok , long line , const char * str )
 {
 	enum { LARGEST_ERROR_LEN = 256 } ;
 	char buff[ LARGEST_ERROR_LEN ] ;
 	if ( ok ) return ;
 	assert( false ) ;
-	FormatMessageA( FORMAT_MESSAGE_FROM_SYSTEM , nullptr , GetLastError() , 
-		MAKELANGID( LANG_NEUTRAL , SUBLANG_DEFAULT ) , buff , LARGEST_ERROR_LEN , NULL );
-	std::cerr << "\n" << line << "  " << str << " : " << buff ; // todo : message window
+	// function translate message
+	//FormatMessageA( FORMAT_MESSAGE_FROM_SYSTEM , nullptr , GetLastError() , 
+		//MAKELANGID( LANG_NEUTRAL , SUBLANG_DEFAULT ) , buff , LARGEST_ERROR_LEN , NULL );
+	//std::cerr << "\n" << line << "  " << str << " : " << buff ; // todo : message window
+	 SystemManager::Error::last_message() ;
 	quit() ;
 }
 
@@ -333,10 +248,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
 
     HACCEL hAccelTable = LoadAccelerators( hInstance, MAKEINTRESOURCE(IDC_WIN32PROJECT5));
-
+	
     MSG msg;
 
     // Main message loop:
+
     while ( GetMessage( &msg , nullptr , 0 , 0 ) )
     {
         if ( ! TranslateAccelerator( msg.hwnd , hAccelTable , &msg ) )
@@ -360,7 +276,8 @@ BOOL InitInstance( HINSTANCE hInstance , int nCmdShow )
    hInst = hInstance ;
 
    hWnd = CreateWindowExW( 0 , L"Static", szTitle, 0 ,
-      0, 0, 0, 0, HWND_MESSAGE, nullptr, hInstance, nullptr);
+						   0, 0, 0, 0, HWND_MESSAGE, 
+						   nullptr , hInstance , nullptr ) ;
 
    if ( ! hWnd )
    {
@@ -377,7 +294,7 @@ BOOL InitInstance( HINSTANCE hInstance , int nCmdShow )
    TRY_TO(( show_tray_icon( tray_obj ) )) ;
    TRY_TO(( init_cursor_context( cursor_ctx , hInst ) )) ;
    TRY_TO(( corrupt_cursor( cursor_ctx ) )) ;
-
+   
    return TRUE ;
 }
 
@@ -388,9 +305,12 @@ LRESULT CALLBACK WndProc( HWND hWnd , UINT message , WPARAM wParam , LPARAM lPar
 		case TrayObject::WM_TRAY_OBJECT:
 			if( lParam == WM_RBUTTONUP )
 			{
+				
 				POINT pos ;
 				GetCursorPos( &pos ) ; // GET_X_LPARAM( wParam ) does not work for some reason ;
-
+				
+				TRY_TO(( SetForegroundWindow( hWnd ) )); // foreground window ( globally )
+				
 				UINT action = TrackPopupMenu(tray_menu.root,
 					TPM_RETURNCMD | TPM_NONOTIFY, // Do not send notifications while open
 					pos.x , pos.y , 0, hWnd, nullptr ) ;

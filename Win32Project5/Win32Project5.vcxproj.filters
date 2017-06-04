@@ -30,12 +30,48 @@
     <ClInclude Include="Win32Project5.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CCursor.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ICursorProvider.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CColoredProvider.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CError.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hc_action_macro.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CCurrentUserAutostart.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSingleInstanceMutex.hxx">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Win32Project5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CCursor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CColoredProvider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CError.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CCurrentUserAutostart.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CSingleInstanceMutex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
