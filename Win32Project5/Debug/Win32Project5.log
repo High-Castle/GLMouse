@@ -1,0 +1,35 @@
+﻿  stdafx.cpp
+  Win32Project5.cpp
+  CTrayObject.cpp
+  CTrayMenu.cpp
+c:\users\yarboy\documents\visual studio 2015\projects\win32project5\win32project5\hc_action_macro.hxx(16): warning C4800: 'HMENU': forcing value to bool 'true' or 'false' (performance warning)
+  c:\users\yarboy\documents\visual studio 2015\projects\win32project5\win32project5\hc_action_macro.hxx(35): note: see reference to function template instantiation 'tools::action_commit_or_rollback<27,app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_427d5c58d756a5aa5050512597175458>,app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_d2d1c7df173463d5fd9c8b4d37435279>>::action_commit_or_rollback<_Ty,app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_d2d1c7df173463d5fd9c8b4d37435279>>(bool &,F_ &&,AF_ &&)' being compiled
+          with
+          [
+              _Ty=app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_427d5c58d756a5aa5050512597175458>,
+              F_=app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_427d5c58d756a5aa5050512597175458>,
+              AF_=app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_d2d1c7df173463d5fd9c8b4d37435279>
+          ]
+  c:\users\yarboy\documents\visual studio 2015\projects\win32project5\win32project5\hc_action_macro.hxx(35): note: see reference to function template instantiation 'tools::action_commit_or_rollback<27,app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_427d5c58d756a5aa5050512597175458>,app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_d2d1c7df173463d5fd9c8b4d37435279>>::action_commit_or_rollback<_Ty,app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_d2d1c7df173463d5fd9c8b4d37435279>>(bool &,F_ &&,AF_ &&)' being compiled
+          with
+          [
+              _Ty=app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_427d5c58d756a5aa5050512597175458>,
+              F_=app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_427d5c58d756a5aa5050512597175458>,
+              AF_=app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_d2d1c7df173463d5fd9c8b4d37435279>
+          ]
+  c:\users\yarboy\documents\visual studio 2015\projects\win32project5\win32project5\ctraymenu.cpp(26): note: see reference to function template instantiation 'tools::action_commit_or_rollback<27,app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_427d5c58d756a5aa5050512597175458>,app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_d2d1c7df173463d5fd9c8b4d37435279>> tools::make_action_helper<27,app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_427d5c58d756a5aa5050512597175458>,app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_d2d1c7df173463d5fd9c8b4d37435279>>(bool &,app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_427d5c58d756a5aa5050512597175458> &&,app::CTrayMenu::init::<lambda_d1985f8872e77b320073337bf57b83e2>::()::<lambda_d2d1c7df173463d5fd9c8b4d37435279> &&)' being compiled
+  CLogging.cpp
+  CSingleInstanceMutex.cpp
+  CMouse_LL_Hook.cpp
+c:\users\yarboy\documents\visual studio 2015\projects\win32project5\win32project5\cmouse_ll_hook.cpp(40): warning C4800: 'HHOOK': forcing value to bool 'true' or 'false' (performance warning)
+  CMessageOnlyWindow.cpp
+  CError.cpp
+  CCurrentUserAutostart.cpp
+  CColoredProvider.cpp
+c:\users\yarboy\documents\visual studio 2015\projects\win32project5\win32project5\ccoloredprovider.cpp(69): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  CCursor.cpp
+c:\users\yarboy\documents\visual studio 2015\projects\win32project5\win32project5\ccursor.cpp(34): warning C4800: 'BOOL': forcing value to bool 'true' or 'false' (performance warning)
+c:\users\yarboy\documents\visual studio 2015\projects\win32project5\win32project5\ccursor.cpp(38): warning C4800: 'BOOL': forcing value to bool 'true' or 'false' (performance warning)
+  CApplication.cpp
+  Generating Code...
+  Win32Project5.vcxproj -> C:\Users\yarboy\Documents\Visual Studio 2015\Projects\Win32Project5\Debug\Win32Project5.exe

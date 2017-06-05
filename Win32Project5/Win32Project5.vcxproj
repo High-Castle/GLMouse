@@ -218,12 +218,18 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CApplication.hxx" />
     <ClInclude Include="CCursor.hxx" />
     <ClInclude Include="CColoredProvider.hxx" />
     <ClInclude Include="CError.hxx" />
+    <ClInclude Include="CMessageOnlyWindow.hxx" />
+    <ClInclude Include="CMouse_LL_Hook.hxx" />
+    <ClInclude Include="CTrayMenu.hxx" />
+    <ClInclude Include="CTrayObject.hxx" />
     <ClInclude Include="hc_action_macro.hxx" />
     <ClInclude Include="CCurrentUserAutostart.hxx" />
     <ClInclude Include="CSingleInstanceMutex.hxx" />
+    <ClInclude Include="CLogging.hxx" />
     <ClInclude Include="ICursorProvider.hxx" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
@@ -231,11 +237,17 @@
     <ClInclude Include="Win32Project5.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CApplication.cpp" />
     <ClCompile Include="CCursor.cpp" />
     <ClCompile Include="CColoredProvider.cpp" />
     <ClCompile Include="CCurrentUserAutostart.cpp" />
     <ClCompile Include="CError.cpp" />
+    <ClCompile Include="CMessageOnlyWindow.cpp" />
+    <ClCompile Include="CMouse_LL_Hook.cpp" />
     <ClCompile Include="CSingleInstanceMutex.cpp" />
+    <ClCompile Include="CLogging.cpp" />
+    <ClCompile Include="CTrayMenu.cpp" />
+    <ClCompile Include="CTrayObject.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
