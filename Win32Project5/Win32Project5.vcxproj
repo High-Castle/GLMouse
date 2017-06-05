@@ -218,7 +218,6 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CApplication.hxx" />
     <ClInclude Include="CCursor.hxx" />
     <ClInclude Include="CColoredProvider.hxx" />
     <ClInclude Include="CError.hxx" />
@@ -237,7 +236,6 @@
     <ClInclude Include="Win32Project5.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CApplication.cpp" />
     <ClCompile Include="CCursor.cpp" />
     <ClCompile Include="CColoredProvider.cpp" />
     <ClCompile Include="CCurrentUserAutostart.cpp" />

@@ -41,7 +41,7 @@ namespace cursor
 
 	
 
-	sys::EErrorType CCursor::init( HCURSOR cur , std::unique_ptr< ICursorProvider > provider ) noexcept
+	sys::EErrorType CCursor::init( HCURSOR cur , std::shared_ptr< ICursorProvider > provider ) noexcept
 	{
 		if ( ! provider ) 
 			return sys::crash_error( "nullptr passed as provider" , FINFO ) ; 

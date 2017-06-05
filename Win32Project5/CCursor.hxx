@@ -14,7 +14,7 @@ namespace cursor
 	struct CCursor final
 	{
 		// note that only after init is called any other operation can be performed
-	    static sys::EErrorType init( HCURSOR cur , std::unique_ptr< ICursorProvider > provider ) noexcept ,
+	    static sys::EErrorType init( HCURSOR cur , std::shared_ptr< ICursorProvider > provider ) noexcept ,
 							   free() noexcept ;
 		
 		static sys::EErrorType set_cursor_provider ( std::unique_ptr< ICursorProvider > ) noexcept ;
@@ -30,7 +30,7 @@ namespace cursor
 
 	private :
 		struct CImpl { 
-			std::unique_ptr< ICursorProvider > provider_ ;
+			std::shared_ptr< ICursorProvider > provider_ ;
 			HCURSOR original_cursor_ ;
 			bool is_corrupted_ ; 
 		} ;

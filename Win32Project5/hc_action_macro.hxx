@@ -43,7 +43,7 @@ namespace tools
 #define HC_TOOLS_LINE_NAME HC_TOOLS_ASSEMBLE( obj_ , __LINE__ )
 
 #define HC_TOOLS_ACTION( FUNC , AFUNC ) \
-    auto HC_TOOLS_LINE_NAME = tools::make_action_helper<__LINE__>( HC_TOOLS_common_perform_26DO_1996NOT_1USE_1THIS_0ID_ , [ & ] () FUNC , [ & ] () AFUNC ) ; if ( ! HC_TOOLS_LINE_NAME.result() ) { HC_TOOLS_LINE_NAME.discard() ; return ; }
+    auto HC_TOOLS_LINE_NAME = tools::make_action_helper<__LINE__>( HC_TOOLS_common_perform_26DO_1996NOT_1USE_1THIS_0ID_ , [ & ] () -> bool FUNC , [ & ] () AFUNC ) ; if ( ! HC_TOOLS_LINE_NAME.result() ) { HC_TOOLS_LINE_NAME.discard() ; return ; }
 
 #define HC_TOOLS_SCOPE { bool HC_TOOLS_common_perform_26DO_1996NOT_1USE_1THIS_0ID_ = true ; [ & ] () 
 

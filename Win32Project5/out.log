@@ -1,0 +1,7 @@
+
+[CrashError]
+file : c:\users\yarboy\documents\visual studio 2015\projects\win32project5\glmouse\win32project5\win32project5.cpp
+line : 120
+func : operator ()
+message : Boom
+[end error]

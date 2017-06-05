@@ -37,7 +37,7 @@ namespace sys
 		return sys::notify_error( sys::str_last_error() , sys::BAD_ATTEMPT , FINFO ) ; ;
 	}
 
-	bool CMouse_LL_Hook::is_set() noexcept { return impl_.hook ; }
+	bool CMouse_LL_Hook::is_set() noexcept { return impl_.hook != nullptr ; }
 	HHOOK CMouse_LL_Hook::handle () noexcept { return impl_.hook ; } 
 
 }

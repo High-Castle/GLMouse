@@ -32,19 +32,21 @@ namespace sys
 		static void set_error_msg ( const char * ) noexcept ;
 		static void set_func_name ( const char * ) noexcept ;
 		static void set_file_name ( const char * ) noexcept ;
-		
+		static void set_error_type ( EErrorType ) noexcept ;
 		
 		static const char * error_msg ( ) noexcept ;
 		static const char * func_name ( ) noexcept ;
 		static const char * file_name ( ) noexcept ;
-		
+		static EErrorType error_type () noexcept ;
+
 		static void set_value ( error_value_t value ) noexcept ; 
 		static error_value_t value () noexcept ;
 
 		static void set_line ( std::size_t line ) noexcept ;
 		static std::size_t line () noexcept ;
 
-		static void set_message ( const char * error_msg ,
+		static void set_message ( EErrorType ,
+								  const char * error_msg ,
 								  const char * func_name , 
 								  const char * file_name ,
 								  std::size_t line ) noexcept ;
@@ -53,12 +55,13 @@ namespace sys
 			{
 				std::size_t line_ ;
 				int	 value_ ;
-				char error_msg_ [ MAX_ERROR_STR_LEN + 1 ] ;
+				EErrorType type_ ;
+				char error_msg_ [ MAX_ERROR_STR_LEN + 1 ] ; 
 				char file_name_ [ MAX_FILE_NAME_LEN + 1 ] ;
 				char func_name_ [ MAX_FUNC_NAME_LEN + 1 ] ;
 			} ;
 
-			static thread_local CLastError last_error_ ; // inited (zeroed) during static initialization
+			static thread_local CLastError last_error_ ; 
 	} ;
 
 	EErrorType crash_error ( const char * , const char * func_name , 

@@ -15,11 +15,13 @@ thread_local sys::CError::CLastError sys::CError::last_error_ ;
 
 namespace sys 
 {
-	void CError::set_message ( const char * error_msg ,
+	void CError::set_message ( EErrorType type ,
+							   const char * error_msg ,
 							   const char * func_name , 
 							   const char * file_name ,
 							   std::size_t line  ) noexcept
 	{
+		set_error_type( type ) ;
 		set_line( line ) ;
 		set_file_name( file_name ) ;
 		set_func_name( func_name ) ;
@@ -41,6 +43,11 @@ namespace sys
 		tools::set_str( last_error_.file_name_ , error_msg_str  ) ;
 	}
 
+	void CError::set_error_type( EErrorType type ) noexcept
+	{
+		last_error_.type_ = type ;
+	}
+
 	const char * CError::error_msg ( ) noexcept
 	{
 		return last_error_.error_msg_ ;
@@ -54,6 +61,11 @@ namespace sys
 	const char * CError::file_name ( ) noexcept
 	{
 		return last_error_.file_name_ ;
+	}
+
+	EErrorType CError::error_type() noexcept
+	{
+		return last_error_.type_ ;
 	}
 
 	void CError::set_value( error_value_t val ) noexcept
@@ -80,6 +92,9 @@ namespace sys
 		static const char * table [] = { "NoError" , "CrashError" , "NotifyError" } ;
 		static_assert( sizeof( table ) / sizeof * table == NOT_FOR_USE_EErrorType_END ,
 					   "Probably you missed something from EErrorType" ) ;
+		
+		if ( err >= NOT_FOR_USE_EErrorType_END ) 
+			return "UnknownError" ;
 
 		return table[ err ] ;
 	}
@@ -88,7 +103,7 @@ namespace sys
 							const char * file_name , std::size_t line , error_value_t val ) noexcept
 	{
 		CError::set_value( val ) ;
-		CError::set_message( msg , func_name , file_name , line ) ;
+		CError::set_message( CrashError , msg , func_name , file_name , line ) ;
 		return CrashError ;
 	}
 
@@ -96,7 +111,7 @@ namespace sys
 							 const char * func_name , const char * file_name , std::size_t line ) noexcept
 	{
 		CError::set_value( val ) ;
-		CError::set_message( msg , func_name , file_name , line ) ;
+		CError::set_message( NotifyError , msg , func_name , file_name , line ) ;
 		return NotifyError ;
 	}
 
@@ -108,7 +123,7 @@ namespace sys
 									MAKELANGID( LANG_NEUTRAL , SUBLANG_DEFAULT ) , 
 									str , CError::MAX_ERROR_STR_LEN + 1 , NULL ) ;
 		if ( ! ret ) {
-			//std::strncpy( str , "[str_win_error - error : FormatMessageA failed]" ,  sizeof str ) ;
+			std::strncpy( str , "[str_win_error - error : FormatMessageA failed]" ,  sizeof str ) ;
 		}
 		return str ;
 	}
