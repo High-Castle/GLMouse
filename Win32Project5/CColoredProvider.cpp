@@ -35,13 +35,22 @@ namespace cursor
 		return CopyCursor( table_[ DEFAULT_CURSOR_IDX ] ) ; 
 	}
 
-	HCURSOR CColoredProvider::next_cursor( POINT new_position ) {
+	// TODO 
+	HCURSOR CColoredProvider::next_cursor( POINT new_position ) { 
+		enum { GAP = 4 } ; 
+		if ( counter_ != GAP ) {
+			++ counter_ ;
+			return CopyCursor( table_[ prev_direction_ ] ) ;
+		}
 		auto cursor_no = calculate_cursor_num( last_pos_ , new_position ) ;
 		last_pos_ = new_position ;
+		prev_direction_ = cursor_no ;
+		counter_ = 0 ;
 		return CopyCursor( table_[ cursor_no ] ) ;
 	}
 
-	CColoredProvider::CColoredProvider ( HINSTANCE instance )
+	CColoredProvider::CColoredProvider ( HINSTANCE instance ) 
+		: prev_direction_( DEFAULT_CURSOR_IDX ) , counter_( 0 )
 	{
 		std::size_t idx = 0 ;
 

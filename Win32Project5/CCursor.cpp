@@ -67,7 +67,7 @@ namespace cursor
 		return sys::NoError ;
 	}
 
-	sys::EErrorType CCursor::set_cursor_provider ( std::unique_ptr< ICursorProvider > new_provider ) noexcept
+	sys::EErrorType CCursor::set_cursor_provider ( std::shared_ptr< ICursorProvider > new_provider ) noexcept
 	{
 		if ( ! new_provider ) 
 			return sys::crash_error( "nullptr provided as new cursor provider" , FINFO ) ;

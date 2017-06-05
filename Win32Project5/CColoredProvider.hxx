@@ -25,6 +25,8 @@ namespace cursor
 				   DEFAULT_CURSOR_IDX = 4 } ;
 			CColoredProvider( HINSTANCE ) ;
 			HCURSOR table_ [ DIRECTION_TABLE_SZ ] ;
+			std::size_t prev_direction_ ;
 			POINT last_pos_ ;
+			unsigned counter_ ;
 	} ;
 }

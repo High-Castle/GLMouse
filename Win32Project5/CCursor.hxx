@@ -17,7 +17,7 @@ namespace cursor
 	    static sys::EErrorType init( HCURSOR cur , std::shared_ptr< ICursorProvider > provider ) noexcept ,
 							   free() noexcept ;
 		
-		static sys::EErrorType set_cursor_provider ( std::unique_ptr< ICursorProvider > ) noexcept ;
+		static sys::EErrorType set_cursor_provider ( std::shared_ptr< ICursorProvider > ) noexcept ; // but unset hook before changing
 		
 		static ICursorProvider& get_cursor_provider () noexcept ;
 
