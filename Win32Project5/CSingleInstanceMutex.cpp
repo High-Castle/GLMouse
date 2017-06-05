@@ -1,27 +1,32 @@
+#include "stdafx.h"
 #include "Windows.h"
 
 #include "CError.hxx"
 #include "CSingleInstanceMutex.hxx"
 
-#define FINFO __FILE__ , __func__
+#define FINFO_CPP_FILE
+#include "finfo_macro.hxx"
+
+sys::CSingleInstanceMutex::CImpl sys::CSingleInstanceMutex::impl_ ;
 
 namespace sys
 {
 	EErrorType CSingleInstanceMutex::acquire( const char * name ) noexcept
 	{
-		mutex_ = CreateMutexA( nullptr /*TODO (.?)*/ , true /*acquire created mutex*/ , name ) ;  
+		impl_.mutex = CreateMutexA( nullptr /**/ , true /*acquire created mutex*/ , name ) ;  
 
-		if ( ! mutex_ ) 
-			return crash_error( get_last_error() , FINFO ) ; ;
+		if ( ! impl_.mutex ) 
+			return crash_error( str_last_error() , FINFO ) ; 
 		
-		if ( GetLastError() == ERROR_ALREADY_EXISTS ) 
+		if ( GetLastError() == ERROR_ALREADY_EXISTS ) {
+			CloseHandle( impl_.mutex ) ; 
 			return crash_error( "There can be only one instance on the application" , FINFO ) ;
-	
+		}
 		return NoError ;
 	}
 
 	void CSingleInstanceMutex::release() noexcept
 	{
-		CloseHandle( mutex_ ) ;
+		CloseHandle( impl_.mutex ) ; // necessaraly for named objects
 	}
 }

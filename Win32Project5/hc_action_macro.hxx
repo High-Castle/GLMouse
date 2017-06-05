@@ -1,6 +1,6 @@
-#ifdef HC_CPP_FILE
-#ifndef HC_ACTION_MACRO_HXX
-#define HC_ACTION_MACRO_HXX
+#ifdef HC_TOOLS_CPP_FILE
+#ifndef HC_TOOLS_ACTION_MACRO_HXX
+#define HC_TOOLS_ACTION_MACRO_HXX
 #include <utility>
 
 namespace tools
@@ -50,6 +50,10 @@ namespace tools
 #define HC_TOOLS_END_SCOPE () ; } 
 
 #define HC_TOOLS_LEAVE_SCOPE HC_TOOLS_common_perform_26DO_1996NOT_1USE_1THIS_0ID_ = false ;
+
+#else
+
+#error This header can be included only once and only in source file
 
 #endif
 #endif

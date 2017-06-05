@@ -7,9 +7,14 @@ namespace sys
 {
 	struct CSingleInstanceMutex final
 	{
-		EErrorType acquire ( const char * ) noexcept ;
-		void release () noexcept ;
+		static EErrorType acquire ( const char * name ) noexcept ;
+		static void release () noexcept ;
+
 	private :
-		static HANDLE mutex_ ;
+		struct CImpl 
+		{
+			HANDLE mutex ;
+		} ; 
+		static CImpl impl_ ;
 	} ;
 }

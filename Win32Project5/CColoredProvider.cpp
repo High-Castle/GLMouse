@@ -1,45 +1,58 @@
 #pragma once
+#include "stdafx.h"
+#include "Win32Project5.h"
 
 #include <memory>
 #include <exception>
+#include <stdexcept>
+
+#include <cassert>
 
 #include <Windows.h>
-
-#include "stdafx.h"
-#include "Win32Project5.h"
 
 #include "ICursorProvider.hxx"
 #include "CColoredProvider.hxx"
 
+#define FINFO_CPP_FILE
+#include "finfo_macro.hxx"
+
 namespace cursor 
-{
-	enum { DIRECTION_TABLE_SZ = 8 ,
-		   DEFAULT_CURSOR_IDX = 4 } ;
-	
+{	
 	namespace 
 	{
 		std::size_t calculate_cursor_num( POINT prev_pos , POINT next_pos ) noexcept ;
 	}
 
-	HCURSOR CColoredProvider::default_cursor () { 
+	std::unique_ptr<ICursorProvider> CColoredProvider::create ( HINSTANCE instance ) noexcept try
+	{
+		return std::unique_ptr< ICursorProvider >( new CColoredProvider( instance ) ) ;
+	} catch ( std::exception const& e ) {
+		sys::notify_error( e.what() , sys::BAD_ATTEMPT , FINFO ) ;
+		return nullptr ;
+	}
+
+	HCURSOR CColoredProvider::default_cursor () {
 		return CopyCursor( table_[ DEFAULT_CURSOR_IDX ] ) ; 
 	}
 
-	HCURSOR CColoredProvider::next_cursor( POINT new_position )  {
+	HCURSOR CColoredProvider::next_cursor( POINT new_position ) {
 		auto cursor_no = calculate_cursor_num( last_pos_ , new_position ) ;
 		last_pos_ = new_position ;
 		return CopyCursor( table_[ cursor_no ] ) ;
 	}
 
-	CColoredProvider::CColoredProvider ()
+	CColoredProvider::CColoredProvider ( HINSTANCE instance )
 	{
 		std::size_t idx = 0 ;
+
 		for ( auto each : { IDC_CURSOR1 , IDC_CURSOR2 , IDC_CURSOR3 ,
 							IDC_CURSOR4 , IDC_CURSOR5 , IDC_CURSOR6 ,
 							IDC_CURSOR7 , IDC_CURSOR8 } )
 		{
-			table_[ idx ] = LoadCursor( nullptr , MAKEINTRESOURCE( each ) ) ;
-			if ( ! table_[ idx ] ) throw std::system_error{  EAGAIN } ;
+			table_[ idx ] = LoadCursor( instance , MAKEINTRESOURCE( each ) ) ;
+			if ( ! table_[ idx ] ) { 
+				throw std::runtime_error{ "CColoredProvider : error loading cursor" } ;
+			}
 			++ idx ;
 		}
 	}

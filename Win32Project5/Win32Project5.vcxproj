@@ -121,7 +121,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <CompileAsWinRT>false</CompileAsWinRT>
@@ -250,6 +250,7 @@
     <ResourceCompile Include="Win32Project5.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Bitmap.bmp" />
     <Image Include="small.ico" />
     <Image Include="Win32Project5.ico" />
   </ItemGroup>

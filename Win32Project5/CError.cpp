@@ -1,29 +1,26 @@
-#include <cstring>
+#include "stdafx.h"
 
+#include <cstring>
+#include <cstddef>
+#include <cstdio>
+#include <cstdarg>
+#include <cassert>
 #include <Windows.h>
 
 #include "CError.hxx"
 
+#include "str_tools.hxx"
+
+thread_local sys::CError::CLastError sys::CError::last_error_ ;
+
 namespace sys 
 {
-	namespace 
-	{
-		void set_str( char * dst , const char * src ) noexcept
-		{
-			if ( ! src ) {
-				std::strncpy( dst , "[Writing error string error : src is nullptr]" ,  CError::MAX_ERROR_STR_LENGTH + 1 ) ;
-				return ;
-			}
-			std::strncpy( dst , src , CError::MAX_ERROR_STR_LENGTH + 1 ) ;
-			dst[ CError::MAX_ERROR_STR_LENGTH ] = '\0' ;
-		}
-	}
-
-
 	void CError::set_message ( const char * error_msg ,
 							   const char * func_name , 
-							   const char * file_name ) noexcept
+							   const char * file_name ,
+							   std::size_t line  ) noexcept
 	{
+		set_line( line ) ;
 		set_file_name( file_name ) ;
 		set_func_name( func_name ) ;
 		set_error_msg( error_msg ) ;
@@ -31,17 +28,17 @@ namespace sys
 
 	void CError::set_error_msg ( const char * error_msg_str ) noexcept
 	{
-		set_str( last_error_.error_msg_ , error_msg_str ) ;
+		tools::set_str( last_error_.error_msg_ , error_msg_str ) ;
 	}
 
 	void CError::set_func_name ( const char * error_msg_str ) noexcept
 	{
-		set_str( last_error_.func_name_ , error_msg_str ) ;
+		tools::set_str( last_error_.func_name_ , error_msg_str ) ;
 	}
 	
 	void CError::set_file_name ( const char * error_msg_str ) noexcept
 	{
-		set_str( last_error_.file_name_ , error_msg_str ) ;
+		tools::set_str( last_error_.file_name_ , error_msg_str  ) ;
 	}
 
 	const char * CError::error_msg ( ) noexcept
@@ -69,29 +66,56 @@ namespace sys
 		return last_error_.value_ ;
 	}
 
+	void CError::set_line( std::size_t line ) noexcept
+	{
+		last_error_.line_ = line ; 
+	}
+
+	std::size_t CError::line() noexcept
+	{
+		return last_error_.line_ ;
+	}
+
+	const char * str_error_type( EErrorType err ) noexcept {
+		static const char * table [] = { "NoError" , "CrashError" , "NotifyError" } ;
+		static_assert( sizeof( table ) / sizeof * table == NOT_FOR_USE_EErrorType_END ,
+					   "Probably you missed something from EErrorType" ) ;
+
+		return table[ err ] ;
+	}
+
 	EErrorType crash_error( const char * msg , const char * func_name ,
-							const char * file_name , error_value_t val ) noexcept
+							const char * file_name , std::size_t line , error_value_t val ) noexcept
 	{
 		CError::set_value( val ) ;
-		CError::set_message( msg , func_name , file_name ) ;
+		CError::set_message( msg , func_name , file_name , line ) ;
 		return CrashError ;
 	}
 
 	EErrorType notify_error( const char * msg , error_value_t val ,
-							 const char * func_name , const char * file_name ) noexcept
+							 const char * func_name , const char * file_name , std::size_t line ) noexcept
 	{
 		CError::set_value( val ) ;
-		CError::set_message( msg , func_name , file_name ) ;
+		CError::set_message( msg , func_name , file_name , line ) ;
 		return NotifyError ;
 	}
 
-	const char * get_last_error () noexcept
+	const char * str_win_error ( LONG err ) noexcept 
 	{
-		static char str [ CError::MAX_ERROR_STR_LENGTH + 1 ] ;
+		thread_local char str [ CError::MAX_ERROR_STR_LEN + 1 ] ;
 		str[ 0 ] = '\0' ;
-		FormatMessageA( FORMAT_MESSAGE_FROM_SYSTEM , nullptr , GetLastError() , 
-						MAKELANGID( LANG_NEUTRAL , SUBLANG_DEFAULT ) , 
-						str , CError::MAX_ERROR_STR_LENGTH , NULL ) ;
+		DWORD ret = FormatMessageA( FORMAT_MESSAGE_FROM_SYSTEM , nullptr , err , 
+									MAKELANGID( LANG_NEUTRAL , SUBLANG_DEFAULT ) , 
+									str , CError::MAX_ERROR_STR_LEN + 1 , NULL ) ;
+		if ( ! ret ) {
+			//std::strncpy( str , "[str_win_error - error : FormatMessageA failed]" ,  sizeof str ) ;
+		}
 		return str ;
 	}
+
+	const char * str_last_error () noexcept
+	{
+		return str_win_error( GetLastError() ) ;
+	}
+	// */
 }
