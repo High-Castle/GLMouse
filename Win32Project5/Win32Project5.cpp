@@ -42,7 +42,7 @@
 
 #define TRY_TO( EXPR ) try_to( EXPR , __FILE__ , __LINE__  , #EXPR )
 void try_to ( sys::EErrorType err , const char * file_name , std::size_t line , const char * func_name ) ;
-
+// TODO remove capplication 
 LRESULT CALLBACK mouse_hook ( int code , WPARAM wParam , LPARAM lParam )
 {
 	switch( wParam )
